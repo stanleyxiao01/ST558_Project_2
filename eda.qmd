@@ -1,0 +1,47 @@
+---
+title: "ST558 Project_2: Banking Dataset Marketing Targets EDA"
+format: html
+editor: visual
+---
+
+## Introduction
+
+Explore customer characteristics and marketing campaign outcomes
+
+## Data Import
+
+```{r}
+library(tidyverse)
+
+#Read both datasets
+train <- read_delim("Dataset/train.csv", delim = ";")
+test <- read_delim("Dataset/test.csv", delim = ";")
+
+#Combine train and test datasets and remove duplicate rows
+bank_data <- rbind(train, test)
+bank_data <- unique(bank_data)
+
+#Check dimensions
+dim(train)
+dim(test)
+dim(bank_data)
+
+#Check for remaining duplicates
+sum(duplicated(bank_data))
+
+#Clean & format
+bank_data <- bank_data |>
+  mutate(across(where(is.character), as.factor))
+
+#Save combined clean data for the Shiny app
+write_csv(bank_data, "Dataset/bank_clean.csv")
+```
+
+## Data Quality Assessment
+
+```{r}
+colSums(is.na(bank_data))
+sum(duplicated(bank_data))
+summary(bank_data)
+```
+
