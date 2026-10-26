@@ -2,8 +2,10 @@
 # ST 558 Project 2: Bank Marketing Analytics Dashboard
 # Interactive exploration of customer characteristics and term deposit subscription outcomes
 
+library(ggplot2)
 library(shiny)
 library(DT)
+library(shinycssloaders)
 
 # Load the Bank Marketing dataset
 bank_data <- read.csv("Dataset/bank_clean.csv")
@@ -37,6 +39,14 @@ numeric_choices <- c(
   "Campaign Contacts" = "campaign",
   "Call Duration" = "duration",
   "Previous Contacts" = "previous"
+)
+
+# Plot Choices
+plot_choices <- c(
+  "Histogram" = "histogram",
+  "Boxplot" = "boxplot",
+  "Bar Chart" = "bar",
+  "Scatterplot" = "scatter"
 )
 
 # Optional choices for summaries without grouping
@@ -193,10 +203,46 @@ ui <- fluidPage(
                       
                       hr(),
                       
-                      # Visualization
-                      h4("Customer Age Distribution"),
-                      plotOutput("age_plot"))
-           )
+                      # Interactive Data Visualization
+                      h4("Interactive Data Visualizations"),
+                      
+                      p("Choose a plot type and customize its variables, grouping, and faceting."),
+                      
+                      # Users select the type of plot
+                      selectInput(
+                        inputId = "plot_type",
+                        label = "Select Plot Type:",
+                        choices = plot_choices,
+                        selected = "histogram"
+                      ),
+                      
+                      # Display only relevant variable selectors
+                      uiOutput("plot_variable_controls"),
+
+                       # Select an optional grouping variable
+                       selectInput(
+                         inputId = "plot_group",
+                         label = "Group Plot By:",
+                         choices = categorical_choices_optional,
+                         selected = "none"
+                       ),
+                      
+                       # Select an optional faceting variable
+                       selectInput(
+                         inputId = "plot_facet",
+                         label = "Facet Plot By:",
+                         choices = categorical_choices_optional,
+                         selected = "none"
+                       ),
+                      
+                       # Display the selected plot with a loading indicator
+                       shinycssloaders::withSpinner(
+                         plotOutput("interactive_plot", height = "450px"),
+                         type = 4
+                       )
+          
+                     )
+          )
         )
     )
 )
@@ -205,9 +251,8 @@ ui <- fluidPage(
 # Server Logic
 # ---------------------------------------------------------
 server <- function(input, output, session) {
-
+  
   # Dynamic Numeric Sliders
-
   # Generate slider for the first numeric variable
   output$numeric_slider1 <- renderUI({
     
@@ -459,9 +504,80 @@ server <- function(input, output, session) {
         )
       }
     )
+
+    # Dynamic Plot Variable Controls
+    output$plot_variable_controls <- renderUI({
+      
+      req(input$plot_type)
+      
+      plot_type <- input$plot_type
+      
+      if (plot_type == "histogram") {
+        
+        # Histograms require one numerical variable
+        tagList(
+          selectInput(
+            inputId = "plot_numeric_x",
+            label = "Select X-Axis Numerical Variable:",
+            choices = numeric_choices,
+            selected = "age"
+          )
+        )
+      } else if (plot_type == "boxplot") {
+        
+        # Boxplots compare a numerical variable across categories
+        tagList(
+          selectInput(
+            inputId = "plot_category",
+            label = "Select X-Axis Categorical Variable:",
+            choices = categorical_choices,
+            selected = "job"
+          ),
+          
+        selectInput(
+          inputId = "plot_numeric_y",
+          label = "Select Y-Axis Numerical Variable:",
+          choices = numeric_choices,
+          selected = "balance"
+          )
+        )
+        
+      } else if (plot_type == "bar") {
+        
+        # Bar charts require one categorical variable
+        tagList(
+          selectInput(
+            inputId = "plot_category",
+            label = "Select Categorical Variable:",
+            choices = categorical_choices,
+            selected = "job"
+          )
+        )
+        
+      } else if (plot_type == "scatter") {
+        
+        # ScatterPlots compare two numerical variables
+        tagList(
+          selectInput(
+            inputId = "plot_numeric_x",
+            label = "Select X-Axis Numerical Variable:",
+            choices = numeric_choices,
+            selected = "age"
+          ),
+          
+          selectInput(
+            inputId = "plot_numeric_y",
+            label = "Select Y-Axis Numerical Variable:",
+            choices = numeric_choices,
+            selected = "balance"
+          )
+        )
+      }
+      
+    })
     
-    # Generate a histogram of customer ages
-    output$age_plot <- renderPlot({
+    # Generate Various Interactive Plots
+    output$interactive_plot <- renderPlot({
       
       # Retrieve the applied filtered data
       data <- filtered_data()
@@ -469,14 +585,132 @@ server <- function(input, output, session) {
       # Display a message if no observations match
       validate_data(data)
 
-      hist(
-        data$age,
-        main = "Distribution of Customer Age",
-        xlab = "Age",
-        col = "lightblue",
-        border = "white"
-      )
+      # Retrieve the selected plot settings
+      req(input$plot_type)
+      
+      plot_type <- input$plot_type
+      
+      # Retreive grouping and faceting selections
+      group_var <- input$plot_group
+      facet_var <- input$plot_facet
+      
+      req(group_var, facet_var)
+      
+      # Histogram
+      if(plot_type == "histogram") {
+        
+        req(input$plot_numeric_x)
+        
+        numeric_x <- input$plot_numeric_x
+        
+        p <- ggplot(data, aes(x = .data[[numeric_x]])) +
+          geom_histogram(bins = 30, color = "white") +
+          labs(
+            title = paste("Distribution of", numeric_x),
+            x = numeric_x,
+            y = "Frequency"
+          )
+        
+      } else if (plot_type == "boxplot") {
+        
+        # Boxplot
+        
+        req(input$plot_category, input$plot_numeric_y)
+        
+        category <- input$plot_category
+        numeric_y <- input$plot_numeric_y
+        
+        p <- ggplot(data, aes(x = .data[[category]], y = .data[[numeric_y]])) +
+          geom_boxplot() +
+          labs(
+            title = paste(numeric_y, "by", category),
+            x = category,
+            y = numeric_y
+          )
+        
+      } else if (plot_type == "bar") {
+        
+        # Bar Chart
+        
+        req(input$plot_category)
+        
+        category <- input$plot_category
+        
+        p <- ggplot(data, aes(x = .data[[category]])) +
+          geom_bar() +
+          labs(
+            title = paste("Distribution of", category),
+            x = category,
+            y = "Frequency"
+          )
+        
+      } else if (plot_type == "scatter") {
+
+        # Scatterplot
+        
+        req(input$plot_numeric_x, input$plot_numeric_y)
+        
+        numeric_x <- input$plot_numeric_x
+        numeric_y <- input$plot_numeric_y
+        
+        # Prevent selecting identical variables
+        validate(need(numeric_x != numeric_y, "Select two different numerical variables."))
+        
+        p <- ggplot(data, aes(x = .data[[numeric_x]], y = .data[[numeric_y]])) +
+          geom_point(alpha = 0.4) +
+          labs(
+            title = paste(numeric_y, "vs.", numeric_x),
+            x = numeric_x,
+            y = numeric_y
+          )
+        
+      } else {
+        validate(need(FALSE, "Please select a valid plot type."))
+      }
+      
+      # Apply optional grouping through fill or color
+      if (group_var != "none") {
+        
+        if (plot_type == "scatter") {
+          
+          # Color scatterplot points by group
+          p <- p +
+            aes(color = .data[[group_var]]) +
+            labs(color = group_var)
+          
+        } else {
+          
+          # Fill bars and boxplots by groups
+          p <- p +
+            aes(fill = .data[[group_var]]) +
+            labs(fill = group_var)
+          
+        }
+      }
+      
+      # Apply Optional Faceting
+      
+      if (facet_var != "none") {
+        
+        # Create separate panels for each category
+        p <- p + facet_wrap(vars(.data[[facet_var]]))
+      }
+      
+      # Apply a consistent theme and display the completed plot
+      p + theme_minimal() +
+        theme(
+          plot.title = element_text(
+            face = "bold",
+            size = 14
+          ),
+          axis.text.x = element_text(
+            angle = 45,
+            hjust = 1
+          ),
+          legend.position = "bottom"
+        )
     })
+    
 }
 
 # ---------------------------------------------------------
