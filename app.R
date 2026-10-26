@@ -14,7 +14,7 @@ bank_data <- read.csv("Dataset/bank_clean.csv")
 # Validate that the filtered dataset is not empty
 # ---------------------------------------------------------
 validate_data <- function(data) {
-  validate(need(nrow(data) > 0, "No observations match the selected filters."))
+  validate(need(nrow(data) > 0, "No observations match the selected filters. Please broaden your selections and click 'Apply Filters' again"))
 }
 
 # ---------------------------------------------------------
@@ -114,17 +114,76 @@ ui <- fluidPage(
           "apply_filters",
           "Apply Filters",
           class = "btn-primary"
-        )
+        ),
+        
+        hr(),
+        
+        #Display the number of observations after filtering
+        strong("Current Dataset Dize:"),
+        
+        textOutput("observation_count")
     ),
     
         # Main panel: Dashboard tabs
         mainPanel(
           tabsetPanel(
-            # About tab: Project description
+            
+            # ---------------------------------------------------------
+            # About Tab
+            # ---------------------------------------------------------
+            
              tabPanel("About",
-                      h3("About This Dashboard"),
-                      p("Explore bank marketing campaign data.")),
-             
+                      h3("Bank Marketing Analytics Dashboard"),
+                      p("This interactive dashboard explores customer characteristics and marketing campaign outcomes using the Bank Marketing dataset."),
+                      h4("Project Purpose"),
+                      p("The goal of this application is to help users investigate relationships between customer demographics, financial characteristics, campaign interactions, and term deposit subscription outcomes"),
+                      p(strong("Response Variable:"), "The variable 'y' indicates whether a customer subscribed to a term deposit (yes or no)."),
+                      h4("How to Use This Dashboard"),
+                      tags$ol(
+                        tags$li(
+                          "Use the sidebar to select customer job and education filters."
+                        ),
+                        tags$li(
+                          "Choose two numerical variables and adjust their ranges."
+                        ),
+                        tags$li(
+                          "Click Apply Filters to update the dataset."
+                        ),
+                        tags$li(
+                          "Open the Data Download tab to view or download the data."
+                        ),
+                        tags$li(
+                          "Open the Data Exploration tab to generate summary tables and customized visualizations."
+                        ),
+                        tags$li(
+                          "Use grouping and faceting to compare different customer groups."
+                        )
+                      ),
+                      
+                      h4("Dataset Source"),
+                      p(
+                        "The Bank Marketing dataset was obtained from",
+                        tags$a(
+                          "Kaggle - Banking Dataset (Marketing Targets)",
+                          href = "https://www.kaggle.com/datasets/prakharrathi25/banking-dataset-marketing-targets",
+                          target = "_blank"
+                        ),
+                        ". The original Bank Marketing dataset is available through the",
+                        tags$a(
+                          "UCI Machine Learning Repository",
+                          href = "https://archive.ics.uci.edu/dataset/222/bank+marketing",
+                          target = "_blank"
+                        ),
+                        "."
+                      ),
+                      
+                      h4("About This Project"),
+                      
+                      p(
+                        "Developed for ST 558 at North Carolina State University using R, Shiny, ggplot2, and DT"
+                      )
+             ),
+            
              # Data Download tab
              tabPanel("Data Download",
                       
@@ -132,7 +191,10 @@ ui <- fluidPage(
                       
                       p("Explore the dataset and select which data to download."),
                       
-                      DT::dataTableOutput("bank_table"),
+                      shinycssloaders::withSpinner(
+                        DT::dataTableOutput("bank_table"),
+                        type = 4
+                      ),
                       
                       br(),
                       
@@ -177,7 +239,10 @@ ui <- fluidPage(
                         selected = "y"
                       ),
                       
-                      tableOutput("categorical_summary"),
+                      shinycssloaders::withSpinner(
+                        tableOutput("categorical_summary"),
+                        type = 4
+                      ),
                       
                       hr(),
                       
@@ -199,7 +264,10 @@ ui <- fluidPage(
                         selected = "y"
                       ),
                       
-                      tableOutput("numerical_summary"),
+                      shinycssloaders::withSpinner(
+                        tableOutput("numerical_summary"),
+                        type = 4
+                      ),
                       
                       hr(),
                       
@@ -342,17 +410,36 @@ server <- function(input, output, session) {
     filtered_data(data)
   })
   
-    # Display interactive dataset
+  output$observation_count <- renderText({
+    
+    # Retrieve the currently applied dataset
+    data <- filtered_data()
+    
+    paste(
+      format(nrow(data), big.mark = ","),
+      "of",
+      format(nrow(bank_data), big.mark = ","),
+      "observations"
+    )
+    
+  })
+  
+    # Interactive Data Table
     output$bank_table <- DT::renderDataTable({
         
       data <- filtered_data()
+      
+      validate_data(data)
       
       data
       
     },
     options = list(
       pageLength = 10,
-      scrollX = TRUE
+      scrollX = TRUE,
+      searching = TRUE,
+      ordering = TRUE,
+      lengthChange = TRUE
     ),
     rownames = FALSE
     )
