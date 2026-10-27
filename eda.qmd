@@ -1,47 +1,326 @@
 ---
-title: "ST558 Project_2: Banking Dataset Marketing Targets EDA"
-format: html
+title: "Banking Marketing: Exploratory Data Analysis"
+subtitle: "ST 558 Project 2"
+author: "Stanley Xiao"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    theme: cosmo
 editor: visual
 ---
 
 ## Introduction
 
-Explore customer characteristics and marketing campaign outcomes
+This report explores the Bank Marketing dataset which contains information about customers contacted during a direct marketing campgaign conducted by a Portuguese banking institution. The primary objective is to investigate how customer characteristics and campaign interactions relate to whether a customer subscribes to a term deposit.
 
-## Data Import
+The repsonse variable, 'y', records whether a customer subscribed to a term deposit.
+
+The dataset was obtained from [Kaggle: Banking Dataset (Marketing Targets)](https://www.kaggle.com/datasets/prakharrathi25/banking-dataset-marketing-targets), which is based on the [UCI Bank Marketing dataset](https://archive.ics.uci.edu/dataset/222/bank+marketing)
+
+## Data Preparation
 
 ```{r}
+#| label: setup
+#| include: false
+
+# Load packages
+library(ggplot2)
+library(dplyr)
+library(knitr)
 library(tidyverse)
 
-#Read both datasets
+# Read both datasets
 train <- read_delim("Dataset/train.csv", delim = ";")
 test <- read_delim("Dataset/test.csv", delim = ";")
 
-#Combine train and test datasets and remove duplicate rows
+# Combine train and test datasets and remove duplicate rows
 bank_data <- rbind(train, test)
 bank_data <- unique(bank_data)
 
-#Check dimensions
-dim(train)
-dim(test)
-dim(bank_data)
-
-#Check for remaining duplicates
+# Check for remaining duplicates
 sum(duplicated(bank_data))
 
-#Clean & format
+# Clean & format
 bank_data <- bank_data |>
   mutate(across(where(is.character), as.factor))
 
-#Save combined clean data for the Shiny app
+# Save combined clean data for the Shiny app
 write_csv(bank_data, "Dataset/bank_clean.csv")
+
+# Convert categorical variables into factors
+categorical_vars <- c(
+  "job", "marital", "education", "default", "housing", "loan", "contact", "month", "poutcome","y"
+)
+
+bank_data[categorical_vars] <- lapply( bank_data[categorical_vars],factor)
 ```
 
-## Data Quality Assessment
+The analysis uses the cleaned dataset stored in 'Dataset/bank_clean.csv'. Categorical variables are represented as factors to support frequency tables, grouped summaries, and visualizations.
+
+## Dataset Overview
+
+### Dataset Dimensions
 
 ```{r}
-colSums(is.na(bank_data))
-sum(duplicated(bank_data))
-summary(bank_data)
+#| label: dataset-dimensions
+
+# Report the number of observations and variables
+data.frame(
+  Observations = nrow(bank_data),
+  Variables = ncol(bank_data)
+) |>
+  kable(
+    caption = "Dataset Dimensions"
+  )
 ```
+
+### Variable Types
+
+```{r}
+#| label: variable-types
+
+# Summarize the type of each variable
+data.frame(
+  Variable = names(bank_data),
+  Data_Type = sapply(bank_data, function(x) class(x)[1])
+) |>
+  kable(
+    caption = "Variables and Data Types"
+  )
+```
+
+### Missing Values
+
+```{r}
+#| label: missing-values
+
+# Count missing values for each variable
+missing_table <- data.frame(
+  Variable = names(bank_data),
+  Missing_Values = sapply(bank_data, function(x) sum(is.na(x)))
+)
+
+missing_table |>
+  kable(
+    caption = "Missing Values by Variable"
+  )
+```
+
+Note that values such as "unknown" are recorded categories in this dataset and are not automatically treated as missing values.
+
+## Categorical Variable Summaries
+
+### Term Deposit Subscription
+
+```{r}
+#| label: subscription-frequency
+
+# Calculate subscription frequencies and percentages
+subscription_table <- bank_data |>
+  count(y, name = "Frequency") |>
+  mutate(
+    Percentage = round(
+      100 * Frequency / sum(Frequency),
+      2
+    )
+  )
+
+subscription_table |>
+  kable(caption = "Term Deposit Subscription Frequencies")
+```
+
+This table shows the distribution of the response variable. The percentages help assess whether term deposit subscriptions are balanced between customers who subscribed and those who did not.
+
+### Customer Job Categories
+
+```{r}
+#| label: job-frequency
+
+# Calculate frequencies for customer occupations
+job_table <- bank_data |>
+  count(job, name = "Frequency") |>
+  mutate(
+    Percentage = round(
+      100 * Frequency / sum(Frequency),
+      2
+    )
+  ) |>
+  arrange(desc(Frequency))
+
+job_table |>
+  kable(
+    caption = "Customer Job Frequencies"
+  )
+```
+
+This table identifies the most common occupational categories among customers in the dataset.
+
+### Subscription Outcome by Education
+
+```{r}
+#| label: education-subscription
+
+# Calculate frequencies for education and subscription
+education_subscription <- bank_data |>
+  count(education, y, name = "Frequency") |>
+  group_by(education) |>
+  mutate(
+    Percentage_Within_Education = round(
+      100 * Frequency / sum(Frequency),
+      2
+    )
+  ) |>
+  ungroup()
+
+education_subscription |>
+  kable(
+    caption = "Subscription Outcomes by Education Level"
+  )
+```
+
+This two-way summary compares subscription outcomes across education categories. Percentages are calculated within each education group, allowing comparisons between groups at different sizes.
+
+## Numerical Variable Summaries
+
+### Overall Descriptive Statistics
+
+```{r}
+#| label: overall-numeric-summary
+
+# Select numerical variables
+numeric_vars <- c(
+  "age", "balance", "duration", "campaign", "pdays", "previous"
+)
+
+# Calculate descriptive statistics for each variable
+numeric_summary <- bind_rows(lapply(numeric_vars, function(variable) {
+  
+  x <- bank_data[[variable]]
+  x <- x[!is.na(x)]
+  
+  data.frame(
+    Variable = variable,
+    Count = length(x),
+    Mean = mean(x),
+    Median = median(x),
+    SD = sd(x),
+    Min = min(x),
+    Max = max(x)
+  )
+}))
+
+# Round numerical results
+numeric_summary <- numeric_summary |>
+  mutate(
+    across(
+      c(Mean, Median, SD, Min, Max),
+      ~ round(.x, 2)
+    )
+  )
+
+numeric_summary |>
+  kable(
+    caption = "Overall Numerical Descriptive Statistics"
+  )
+```
+
+The numerical summary describes the center, spread, and range of the selected quantitative variables. Differences between means and medians may suggest skewed distributions or extreme observations.
+
+For the variable 'pdays', special values like '-1' may indicate that a customer was not previously contacted. These values should be interpreted according to the dataset documentation rather than treated as ordinary elapsed days.
+
+### Numerical Summaries by Subscription Outcome
+
+```{r}
+#| label: grouped-numeric-summary
+
+# Compare age, balance, and call duration by outcome
+grouped_summary <- bank_data |>
+  group_by(y) |>
+  summarise(
+    Count = n(),
+    Mean_Age = mean(age, na.rm = TRUE),
+    Median_Age = median(age, na.rm = TRUE),
+    Mean_Balance = mean(balance, na.rm = TRUE),
+    Median_Balance = median(balance, na.rm = TRUE),
+    Mean_Duration = mean(duration, na.rm = TRUE),
+    Median_Duration = median(duration, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    across(
+      where(is.numeric),
+      ~ round(.x, 2)
+    )
+  )
+
+grouped_summary |>
+  kable(
+    caption = "Numerical Characteristics by Subscription Outcome"
+  )
+```
+
+This grouped summarycompares customers who subscribed to a term deposit with those who did not. It provides an initial assessment of differences in age, account balance, and call duration between the two groups.
+
+Because this is an observational dataset, any differences should be interpreted as associations rather than evidence of causation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
