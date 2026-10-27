@@ -119,7 +119,7 @@ ui <- fluidPage(
         hr(),
         
         #Display the number of observations after filtering
-        strong("Current Dataset Dize:"),
+        strong("Current Dataset Size:"),
         
         textOutput("observation_count")
     ),
@@ -133,11 +133,18 @@ ui <- fluidPage(
             # ---------------------------------------------------------
             
              tabPanel("About",
+                      tags$img(
+                        src = "banking_photo.jpg?v=2",
+                        alt = "Banking and financial analytics",
+                        width = "600"
+                      ),
                       h3("Bank Marketing Analytics Dashboard"),
                       p("This interactive dashboard explores customer characteristics and marketing campaign outcomes using the Bank Marketing dataset."),
                       h4("Project Purpose"),
                       p("The goal of this application is to help users investigate relationships between customer demographics, financial characteristics, campaign interactions, and term deposit subscription outcomes"),
                       p(strong("Response Variable:"), "The variable 'y' indicates whether a customer subscribed to a term deposit (yes or no)."),
+                      h4("About the Dataset"),
+                      p("The dataset contains 45,211 observations and 17 variables. It includes demographic characteristics, financial information, previous marketing interactions, and term deposit subscription outcomes"),
                       h4("How to Use This Dashboard"),
                       tags$ol(
                         tags$li(
@@ -180,7 +187,7 @@ ui <- fluidPage(
                       h4("About This Project"),
                       
                       p(
-                        "Developed for ST 558 at North Carolina State University using R, Shiny, ggplot2, and DT"
+                        "Developed for ST 558 at North Carolina State University using R, Shiny, ggplot2, and DT."
                       )
              ),
             
