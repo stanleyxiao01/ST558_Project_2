@@ -89,7 +89,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a>
+  <ul class="collapse">
+  <li><a href="#original-data-cleaning-process" id="toc-original-data-cleaning-process" class="nav-link" data-scroll-target="#original-data-cleaning-process">Original Data Cleaning Process</a></li>
+  <li><a href="#loading-the-cleaned-dataset" id="toc-loading-the-cleaned-dataset" class="nav-link" data-scroll-target="#loading-the-cleaned-dataset">Loading the Cleaned Dataset</a></li>
+  </ul></li>
   <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link" data-scroll-target="#dataset-overview">Dataset Overview</a>
   <ul class="collapse">
   <li><a href="#dataset-dimensions" id="toc-dataset-dimensions" class="nav-link" data-scroll-target="#dataset-dimensions">Dataset Dimensions</a></li>
@@ -107,6 +111,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#overall-descriptive-statistics" id="toc-overall-descriptive-statistics" class="nav-link" data-scroll-target="#overall-descriptive-statistics">Overall Descriptive Statistics</a></li>
   <li><a href="#numerical-summaries-by-subscription-outcome" id="toc-numerical-summaries-by-subscription-outcome" class="nav-link" data-scroll-target="#numerical-summaries-by-subscription-outcome">Numerical Summaries by Subscription Outcome</a></li>
   </ul></li>
+  <li><a href="#exploratory-data-visualizations" id="toc-exploratory-data-visualizations" class="nav-link" data-scroll-target="#exploratory-data-visualizations">Exploratory Data Visualizations</a>
+  <ul class="collapse">
+  <li><a href="#plot-1-distribution-of-customer-age" id="toc-plot-1-distribution-of-customer-age" class="nav-link" data-scroll-target="#plot-1-distribution-of-customer-age">Plot 1: Distribution of Customer Age</a></li>
+  <li><a href="#plot-2-distribution-of-account-balances" id="toc-plot-2-distribution-of-account-balances" class="nav-link" data-scroll-target="#plot-2-distribution-of-account-balances">Plot 2: Distribution of Account Balances</a></li>
+  <li><a href="#plot-3-subscription-outcome-by-education-level" id="toc-plot-3-subscription-outcome-by-education-level" class="nav-link" data-scroll-target="#plot-3-subscription-outcome-by-education-level">Plot 3: Subscription Outcome by Education Level</a></li>
+  <li><a href="#plot-4-account-balance-by-subscription-outcome" id="toc-plot-4-account-balance-by-subscription-outcome" class="nav-link" data-scroll-target="#plot-4-account-balance-by-subscription-outcome">Plot 4: Account Balance by Subscription Outcome</a></li>
+  <li><a href="#plot-5-age-and-account-balance-by-subscription-outcome" id="toc-plot-5-age-and-account-balance-by-subscription-outcome" class="nav-link" data-scroll-target="#plot-5-age-and-account-balance-by-subscription-outcome">Plot 5: Age and Account Balance by Subscription Outcome</a></li>
+  <li><a href="#plot-6-subscription-rates-by-job-and-education" id="toc-plot-6-subscription-rates-by-job-and-education" class="nav-link" data-scroll-target="#plot-6-subscription-rates-by-job-and-education">Plot 6: Subscription Rates by Job and Education</a></li>
+  </ul></li>
+  <li><a href="#discussion-conclusion" id="toc-discussion-conclusion" class="nav-link" data-scroll-target="#discussion-conclusion">Discussion &amp; Conclusion</a></li>
   </ul>
 </nav>
 </div>
@@ -140,13 +154,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>This report explores the Bank Marketing dataset which contains information about customers contacted during a direct marketing campgaign conducted by a Portuguese banking institution. The primary objective is to investigate how customer characteristics and campaign interactions relate to whether a customer subscribes to a term deposit.</p>
-<p>The repsonse variable, ‘y’, records whether a customer subscribed to a term deposit.</p>
+<p>This report explores the Bank Marketing dataset which contains information about customers contacted during a direct marketing campaign conducted by a Portuguese banking institution. The primary objective is to investigate how customer characteristics and campaign interactions relate to whether a customer subscribes to a term deposit.</p>
+<p>The response variable, <code>y</code>, records whether a customer subscribed to a term deposit.</p>
 <p>The dataset was obtained from <a href="https://www.kaggle.com/datasets/prakharrathi25/banking-dataset-marketing-targets">Kaggle: Banking Dataset (Marketing Targets)</a>, which is based on the <a href="https://archive.ics.uci.edu/dataset/222/bank+marketing">UCI Bank Marketing dataset</a></p>
 </section>
 <section id="data-preparation" class="level2">
 <h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
-<p>The analysis uses the cleaned dataset stored in ‘Dataset/bank_clean.csv’. Categorical variables are represented as factors to support frequency tables, grouped summaries, and visualizations.</p>
+<p>The original dataset was obtained from Kaggle and consisted of two files, ‘train.csv’ and ‘test.csv’. The datasets were combined, duplicate observations were removed, and categorical variables were converted to factors. The cleaned dataset was then saved as <code>bank_clean.csv</code> for use in both the Shiny application and this exploratory analysis.</p>
+<section id="original-data-cleaning-process" class="level3">
+<h3 class="anchored" data-anchor-id="original-data-cleaning-process">Original Data Cleaning Process</h3>
+<p>The following code documents the initial data preparation procedure. It is not executed during rendering because the cleaned dataset has already been created.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read both datasets</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"Dataset/train.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"Dataset/test.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine train and test datasets and remove duplicate rows</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(train, test)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> <span class="fu">distinct</span>(bank_data)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for remaining duplicates</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">duplicated</span>(bank_data))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean &amp; format</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), as.factor))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Save combined clean data for the Shiny app</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(bank_data, <span class="st">"Dataset/bank_clean.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="loading-the-cleaned-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="loading-the-cleaned-dataset">Loading the Cleaned Dataset</h3>
+<p>The resulting dataset contains 45211 observations and 17 variables.</p>
+</section>
 </section>
 <section id="dataset-overview" class="level2">
 <h2 class="anchored" data-anchor-id="dataset-overview">Dataset Overview</h2>
@@ -155,14 +201,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Report the number of observations and variables</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Observations =</span> <span class="fu">nrow</span>(bank_data),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variables =</span> <span class="fu">ncol</span>(bank_data)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Dataset Dimensions"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Report the number of observations and variables</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Observations =</span> <span class="fu">nrow</span>(bank_data),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variables =</span> <span class="fu">ncol</span>(bank_data)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Dataset Dimensions"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -188,14 +234,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the type of each variable</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Data_Type =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">class</span>(x)[<span class="dv">1</span>])</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Variables and Data Types"</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the type of each variable</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Data_Type =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">class</span>(x)[<span class="dv">1</span>])</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Variables and Data Types"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -211,7 +257,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td style="text-align: left;">age</td>
 <td style="text-align: left;">age</td>
-<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">integer</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">job</td>
@@ -236,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td style="text-align: left;">balance</td>
 <td style="text-align: left;">balance</td>
-<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">integer</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">housing</td>
@@ -256,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td style="text-align: left;">day</td>
 <td style="text-align: left;">day</td>
-<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">integer</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">month</td>
@@ -266,22 +312,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td style="text-align: left;">duration</td>
 <td style="text-align: left;">duration</td>
-<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">integer</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">campaign</td>
 <td style="text-align: left;">campaign</td>
-<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">integer</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">pdays</td>
 <td style="text-align: left;">pdays</td>
-<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">integer</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">previous</td>
 <td style="text-align: left;">previous</td>
-<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">integer</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">poutcome</td>
@@ -303,16 +349,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values for each variable</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>missing_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Missing_Values =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>missing_table <span class="sc">|&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Missing Values by Variable"</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values for each variable</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>missing_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Missing_Values =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>missing_table <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Missing Values by Variable"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -424,18 +470,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate subscription frequencies and percentages</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="sc">|&gt;</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Term Deposit Subscription Frequencies"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate subscription frequencies and percentages</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="sc">|&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Term Deposit Subscription Frequencies"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -469,21 +515,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for customer occupations</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>job_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(job, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frequency))</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>job_table <span class="sc">|&gt;</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Customer Job Frequencies"</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for customer occupations</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>job_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(job, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frequency))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>job_table <span class="sc">|&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Customer Job Frequencies"</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -567,22 +613,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for education and subscription</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(education, y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(education) <span class="sc">|&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage_Within_Education =</span> <span class="fu">round</span>(</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="sc">|&gt;</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Subscription Outcomes by Education Level"</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for education and subscription</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(education, y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(education) <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage_Within_Education =</span> <span class="fu">round</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="sc">|&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Subscription Outcomes by Education Level"</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -658,41 +704,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select numerical variables</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>numeric_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"age"</span>, <span class="st">"balance"</span>, <span class="st">"duration"</span>, <span class="st">"campaign"</span>, <span class="st">"pdays"</span>, <span class="st">"previous"</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate descriptive statistics for each variable</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(numeric_vars, <span class="cf">function</span>(variable) {</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> bank_data[[variable]]</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> variable,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">length</span>(x),</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(x),</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median =</span> <span class="fu">median</span>(x),</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD =</span> <span class="fu">sd</span>(x),</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Min =</span> <span class="fu">min</span>(x),</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Max =</span> <span class="fu">max</span>(x)</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numerical results</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> numeric_summary <span class="sc">|&gt;</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(Mean, Median, SD, Min, Max),</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="sc">|&gt;</span></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Overall Numerical Descriptive Statistics"</span></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select numerical variables</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>numeric_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"age"</span>, <span class="st">"balance"</span>, <span class="st">"duration"</span>, <span class="st">"campaign"</span>, <span class="st">"pdays"</span>, <span class="st">"previous"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate descriptive statistics for each variable</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(numeric_vars, <span class="cf">function</span>(variable) {</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> bank_data[[variable]]</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> variable,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">length</span>(x),</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(x),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median =</span> <span class="fu">median</span>(x),</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD =</span> <span class="fu">sd</span>(x),</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Min =</span> <span class="fu">min</span>(x),</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Max =</span> <span class="fu">max</span>(x)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numerical results</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> numeric_summary <span class="sc">|&gt;</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(Mean, Median, SD, Min, Max),</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="sc">|&gt;</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Overall Numerical Descriptive Statistics"</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -768,37 +814,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>The numerical summary describes the center, spread, and range of the selected quantitative variables. Differences between means and medians may suggest skewed distributions or extreme observations.</p>
-<p>For the variable ‘pdays’, special values like ‘-1’ may indicate that a customer was not previously contacted. These values should be interpreted according to the dataset documentation rather than treated as ordinary elapsed days.</p>
+<p>For the variable <code>pdays</code>, special values like ‘-1’ may indicate that a customer was not previously contacted. These values should be interpreted according to the dataset documentation rather than treated as ordinary elapsed days.</p>
 </section>
 <section id="numerical-summaries-by-subscription-outcome" class="level3">
 <h3 class="anchored" data-anchor-id="numerical-summaries-by-subscription-outcome">Numerical Summaries by Subscription Outcome</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare age, balance, and call duration by outcome</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">n</span>(),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Age =</span> <span class="fu">median</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Balance =</span> <span class="fu">mean</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Balance =</span> <span class="fu">median</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Duration =</span> <span class="fu">mean</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Duration =</span> <span class="fu">median</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">where</span>(is.numeric),</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="sc">|&gt;</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Numerical Characteristics by Subscription Outcome"</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare age, balance, and call duration by outcome</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">n</span>(),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Age =</span> <span class="fu">median</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Balance =</span> <span class="fu">mean</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Balance =</span> <span class="fu">median</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Duration =</span> <span class="fu">mean</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Duration =</span> <span class="fu">median</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">where</span>(is.numeric),</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="sc">|&gt;</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Numerical Characteristics by Subscription Outcome"</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -850,11 +896,238 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </div>
 </div>
-<p>This grouped summarycompares customers who subscribed to a term deposit with those who did not. It provides an initial assessment of differences in age, account balance, and call duration between the two groups.</p>
+<p>This grouped summary compares customers who subscribed to a term deposit with those who did not. It provides an initial assessment of differences in age, account balance, and call duration between the two groups.</p>
 <p>Because this is an observational dataset, any differences should be interpreted as associations rather than evidence of causation.</p>
+</section>
+</section>
+<section id="exploratory-data-visualizations" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-visualizations">Exploratory Data Visualizations</h2>
+<p>The following visualizations explore customer demographics, account balances, marketing campaign characteristics, and term deposit subscription outcomes. Both univariate and multivariate plots are included to identify patterns and differences across customer groups.</p>
+<section id="plot-1-distribution-of-customer-age" class="level3">
+<h3 class="anchored" data-anchor-id="plot-1-distribution-of-customer-age">Plot 1: Distribution of Customer Age</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Univariate histogram of customer age</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bank_data, <span class="fu">aes</span>(<span class="at">x =</span> age)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Customer Age"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age (Years)"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Customers"</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="eda_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The distribution of customer age is moderately right-skewed, with most customers concentrated between 25 and 60 years old. The highest frequencies occur among customers in their early to mid-30s, while the number of customers generally decreases at older ages. Relatively few customers are younger than 25 or older than 65. These findings suggests that the bank’s marketing campaign primarily reached working-age adults.</p>
+</section>
+<section id="plot-2-distribution-of-account-balances" class="level3">
+<h3 class="anchored" data-anchor-id="plot-2-distribution-of-account-balances">Plot 2: Distribution of Account Balances</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Univariate histogram of customer account balances</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bank_data, <span class="fu">aes</span>(<span class="at">x =</span> balance)) <span class="sc">+</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">bins =</span> <span class="dv">50</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"darkseagreen"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Account Balances"</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Account Balance"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Customers"</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="eda_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The distribution of account balances is strongly right-skewed. Most customers have relatively low account balances, while a small number have exceptionally high balances, exceeding 100,000 in some cases. The presence of extreme values suggests that the median may provide a more representative measure of a typical customer’s account balance than the mean.</p>
+</section>
+<section id="plot-3-subscription-outcome-by-education-level" class="level3">
+<h3 class="anchored" data-anchor-id="plot-3-subscription-outcome-by-education-level">Plot 3: Subscription Outcome by Education Level</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate plot: education and subscription outcome</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  bank_data,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> education, <span class="at">fill =</span> y)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> scales<span class="sc">::</span>percent</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Term Deposit Subscription by Education"</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Education Level"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Percentage of Customers"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Subscribed"</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="eda_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Term deposit subscription rates vary across education levels. Customers with tertiary education have the highest observed subscription proportion, while those with primary education have the lowest. This suggests an association between education level and subscriptino outcome, although the anlaysis does not establish a causal relationship.</p>
+</section>
+<section id="plot-4-account-balance-by-subscription-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="plot-4-account-balance-by-subscription-outcome">Plot 4: Account Balance by Subscription Outcome</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate boxplot: balance and subscription outcome</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  bank_data,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> balance, <span class="at">fill =</span> y)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">outlier.alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Account Balance by Subscription Outcome"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Subscribed to Term Deposit"</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Account Balance"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Subscribed"</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2000</span>, <span class="dv">10000</span>)) <span class="sc">+</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="eda_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Customers who subscribed to a term deposit appear to have a higher median account balance than customers who did not subscribe. However, the distributions overlap substantially, and both groups contain numerous high-balance outliers. Therefore, account balance alone may not clearly distinguish between subscription outcomes.</p>
+</section>
+<section id="plot-5-age-and-account-balance-by-subscription-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="plot-5-age-and-account-balance-by-subscription-outcome">Plot 5: Age and Account Balance by Subscription Outcome</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate scatterplot with faceting</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  bank_data,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> balance)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.25</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"steelblue"</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> y) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Age vs Account Balance by Subscription Outcome"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age (Years)"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Account Balance"</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="eda_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The faceted scatterplot does not reveal a strong linear relationship between customer age and account balance in either subscription group. Most customers have relatively low account balances across a wide range of ages, while a small number have unusually high balances. The two subscriptino groups show broadly similar patterns, suggesting that age and account balance alone may not provide a clear separation between subscription outcomes.</p>
+</section>
+<section id="plot-6-subscription-rates-by-job-and-education" class="level3">
+<h3 class="anchored" data-anchor-id="plot-6-subscription-rates-by-job-and-education">Plot 6: Subscription Rates by Job and Education</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate subscription percentages for each job and education group</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>heatmap_data <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(job, education) <span class="sc">|&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Subscription_Rate =</span> <span class="fu">mean</span>(y <span class="sc">==</span> <span class="st">"yes"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Customer_Count =</span> <span class="fu">n</span>(),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate heatmap of subscription rates</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  heatmap_data,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> education,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> job,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> Subscription_Rate</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.5</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> Customer_Count),</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">"lightyellow"</span>,</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">"darkblue"</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Subscription Rates by Job and Education"</span>,</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Education Level"</span>,</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Job Category"</span>,</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Subscription</span><span class="sc">\n</span><span class="st">Rate (%)"</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust  =</span> <span class="dv">1</span>)</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="eda_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The heatmap reveals differences in term deposit subscription rates across job categories and education levels. Students and retired customers generally exhibit higher subscription rates than many other occupational groups. In particular, students with primary education display one of the highest observed subscription rates. However, this result should be interpreted cautiously because some job-education combinations may contain relatively few observations. Overall, the heatmap suggests that occupation and education may be jointly associated with subscription outcomes.</p>
+</section>
+</section>
+<section id="discussion-conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion-conclusion">Discussion &amp; Conclusion</h2>
+<p>The exploratory analysis of the Bank Marketing dataset reveals several patterns in customer demographics, financial characteristics, and term deposit subscription outcomes.</p>
+<p>First, most customers are between approximately 25 and 60 years old, with the greatest concentration among individuals in their early to mid-30s. Account balances exhibit substantial right-skewness, with most customers having relatively low balances and a small number having exceptionally high balances. This suggests that medians may be more informative than means when describing typical account balances.</p>
+<p>Second, subscription outcomes appear to vary across customer characteristics. Customers with tertiary education have a higher observed subscription proportion than those with primary or secondary education. Customers who subscribed also appear to have higher median account balances, although there is considerable overlap between the subscription groups.</p>
+<p>Third, the faceted scatterplot does not indicate a strong linear relationship between age and account balance in either subscription group. The heatmap reveals additional differences across combinations of occupation and education, with students and retired customers generally displaying relatively high subscription rates. However, results for groups with small sample sizes should be interpreted with caution.</p>
+<p>Overall, the findings suggest that education, occupation, and account balance may be associated with term deposit subscription outcomes. These results are descriptive and do not establish causal relationships. Future analyses could investigate these associations using statistical models while accounting for additional customer and campaign characteristics.</p>
+<p>An additional consideration is that call duration is observed during or after a marketing contact. Although it may be associated with subscription outcomes, it would not necessarily be available when predicting customer responses before a call takes place.</p>
 <!-- -->
 
-</section>
 </section>
 
 </main>
@@ -1310,331 +1583,471 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Banking Marketing: Exploratory Data Analysis"</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "ST 558 Project 2"</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Stanley Xiao"</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="an">editor:</span><span class="co"> visual</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>This report explores the Bank Marketing dataset which contains information about customers contacted during a direct marketing campgaign conducted by a Portuguese banking institution. The primary objective is to investigate how customer characteristics and campaign interactions relate to whether a customer subscribes to a term deposit.</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>The repsonse variable, 'y', records whether a customer subscribed to a term deposit.</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>The dataset was obtained from <span class="co">[</span><span class="ot">Kaggle: Banking Dataset (Marketing Targets)</span><span class="co">](https://www.kaggle.com/datasets/prakharrathi25/banking-dataset-marketing-targets)</span>, which is based on the <span class="co">[</span><span class="ot">UCI Bank Marketing dataset</span><span class="co">](https://archive.ics.uci.edu/dataset/222/bank+marketing)</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Preparation</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Read both datasets</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"Dataset/train.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"Dataset/test.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine train and test datasets and remove duplicate rows</span></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(train, test)</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> <span class="fu">unique</span>(bank_data)</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for remaining duplicates</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">duplicated</span>(bank_data))</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean &amp; format</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), as.factor))</span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Save combined clean data for the Shiny app</span></span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(bank_data, <span class="st">"Dataset/bank_clean.csv"</span>)</span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert categorical variables into factors</span></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>categorical_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="st">"job"</span>, <span class="st">"marital"</span>, <span class="st">"education"</span>, <span class="st">"default"</span>, <span class="st">"housing"</span>, <span class="st">"loan"</span>, <span class="st">"contact"</span>, <span class="st">"month"</span>, <span class="st">"poutcome"</span>,<span class="st">"y"</span></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>bank_data[categorical_vars] <span class="ot">&lt;-</span> <span class="fu">lapply</span>( bank_data[categorical_vars],factor)</span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>The analysis uses the cleaned dataset stored in 'Dataset/bank_clean.csv'. Categorical variables are represented as factors to support frequency tables, grouped summaries, and visualizations.</span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dataset Overview</span></span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dataset Dimensions</span></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dataset-dimensions</span></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Report the number of observations and variables</span></span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">Observations =</span> <span class="fu">nrow</span>(bank_data),</span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variables =</span> <span class="fu">ncol</span>(bank_data)</span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Dataset Dimensions"</span></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### Variable Types</span></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: variable-types</span></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the type of each variable</span></span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>  <span class="at">Data_Type =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">class</span>(x)[<span class="dv">1</span>])</span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Variables and Data Types"</span></span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="fu">### Missing Values</span></span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: missing-values</span></span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values for each variable</span></span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>missing_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>  <span class="at">Missing_Values =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>missing_table <span class="sc">|&gt;</span></span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Missing Values by Variable"</span></span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>Note that values such as "unknown" are recorded categories in this dataset and are not automatically treated as missing values.</span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Categorical Variable Summaries</span></span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Term Deposit Subscription</span></span>
-<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: subscription-frequency</span></span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate subscription frequencies and percentages</span></span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
-<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
-<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="sc">|&gt;</span></span>
-<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Term Deposit Subscription Frequencies"</span>)</span>
-<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a>This table shows the distribution of the response variable. The percentages help assess whether term deposit subscriptions are balanced between customers who subscribed and those who did not.</span>
-<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="fu">### Customer Job Categories</span></span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: job-frequency</span></span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for customer occupations</span></span>
-<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a>job_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(job, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
-<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
-<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
-<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frequency))</span>
-<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a>job_table <span class="sc">|&gt;</span></span>
-<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Customer Job Frequencies"</span></span>
-<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a>This table identifies the most common occupational categories among customers in the dataset.</span>
-<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a><span class="fu">### Subscription Outcome by Education</span></span>
-<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: education-subscription</span></span>
-<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for education and subscription</span></span>
-<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(education, y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(education) <span class="sc">|&gt;</span></span>
-<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage_Within_Education =</span> <span class="fu">round</span>(</span>
-<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
-<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
-<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="sc">|&gt;</span></span>
-<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Subscription Outcomes by Education Level"</span></span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>This two-way summary compares subscription outcomes across education categories. Percentages are calculated within each education group, allowing comparisons between groups at different sizes.</span>
-<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a><span class="fu">## Numerical Variable Summaries</span></span>
-<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a><span class="fu">### Overall Descriptive Statistics</span></span>
-<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: overall-numeric-summary</span></span>
-<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a><span class="co"># Select numerical variables</span></span>
-<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a>numeric_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a>  <span class="st">"age"</span>, <span class="st">"balance"</span>, <span class="st">"duration"</span>, <span class="st">"campaign"</span>, <span class="st">"pdays"</span>, <span class="st">"previous"</span></span>
-<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate descriptive statistics for each variable</span></span>
-<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(numeric_vars, <span class="cf">function</span>(variable) {</span>
-<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> bank_data[[variable]]</span>
-<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
-<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> variable,</span>
-<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">length</span>(x),</span>
-<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(x),</span>
-<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median =</span> <span class="fu">median</span>(x),</span>
-<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD =</span> <span class="fu">sd</span>(x),</span>
-<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a>    <span class="at">Min =</span> <span class="fu">min</span>(x),</span>
-<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a>    <span class="at">Max =</span> <span class="fu">max</span>(x)</span>
-<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numerical results</span></span>
-<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> numeric_summary <span class="sc">|&gt;</span></span>
-<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(Mean, Median, SD, Min, Max),</span>
-<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
-<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="sc">|&gt;</span></span>
-<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Overall Numerical Descriptive Statistics"</span></span>
-<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a>The numerical summary describes the center, spread, and range of the selected quantitative variables. Differences between means and medians may suggest skewed distributions or extreme observations.</span>
-<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a>For the variable 'pdays', special values like '-1' may indicate that a customer was not previously contacted. These values should be interpreted according to the dataset documentation rather than treated as ordinary elapsed days.</span>
-<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a><span class="fu">### Numerical Summaries by Subscription Outcome</span></span>
-<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: grouped-numeric-summary</span></span>
-<span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-257"><a href="#cb9-257" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare age, balance, and call duration by outcome</span></span>
-<span id="cb9-258"><a href="#cb9-258" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
-<span id="cb9-259"><a href="#cb9-259" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
-<span id="cb9-260"><a href="#cb9-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb9-261"><a href="#cb9-261" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">n</span>(),</span>
-<span id="cb9-262"><a href="#cb9-262" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Age =</span> <span class="fu">median</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-264"><a href="#cb9-264" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Balance =</span> <span class="fu">mean</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Balance =</span> <span class="fu">median</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Duration =</span> <span class="fu">mean</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Duration =</span> <span class="fu">median</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-268"><a href="#cb9-268" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb9-269"><a href="#cb9-269" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb9-270"><a href="#cb9-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-271"><a href="#cb9-271" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb9-272"><a href="#cb9-272" aria-hidden="true" tabindex="-1"></a>      <span class="fu">where</span>(is.numeric),</span>
-<span id="cb9-273"><a href="#cb9-273" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
-<span id="cb9-274"><a href="#cb9-274" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-275"><a href="#cb9-275" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-276"><a href="#cb9-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-277"><a href="#cb9-277" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="sc">|&gt;</span></span>
-<span id="cb9-278"><a href="#cb9-278" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb9-279"><a href="#cb9-279" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Numerical Characteristics by Subscription Outcome"</span></span>
-<span id="cb9-280"><a href="#cb9-280" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-281"><a href="#cb9-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-282"><a href="#cb9-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-283"><a href="#cb9-283" aria-hidden="true" tabindex="-1"></a>This grouped summarycompares customers who subscribed to a term deposit with those who did not. It provides an initial assessment of differences in age, account balance, and call duration between the two groups.</span>
-<span id="cb9-284"><a href="#cb9-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-285"><a href="#cb9-285" aria-hidden="true" tabindex="-1"></a>Because this is an observational dataset, any differences should be interpreted as associations rather than evidence of causation.</span>
-<span id="cb9-286"><a href="#cb9-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-287"><a href="#cb9-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-288"><a href="#cb9-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-289"><a href="#cb9-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-290"><a href="#cb9-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-291"><a href="#cb9-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-292"><a href="#cb9-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-293"><a href="#cb9-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-294"><a href="#cb9-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-295"><a href="#cb9-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-296"><a href="#cb9-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-297"><a href="#cb9-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-298"><a href="#cb9-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-299"><a href="#cb9-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-300"><a href="#cb9-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-301"><a href="#cb9-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-302"><a href="#cb9-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-303"><a href="#cb9-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-304"><a href="#cb9-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-305"><a href="#cb9-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-306"><a href="#cb9-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-307"><a href="#cb9-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-308"><a href="#cb9-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-309"><a href="#cb9-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-310"><a href="#cb9-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-311"><a href="#cb9-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-312"><a href="#cb9-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-313"><a href="#cb9-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-314"><a href="#cb9-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-315"><a href="#cb9-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-316"><a href="#cb9-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-317"><a href="#cb9-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-318"><a href="#cb9-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-319"><a href="#cb9-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-320"><a href="#cb9-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-321"><a href="#cb9-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-322"><a href="#cb9-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-323"><a href="#cb9-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-324"><a href="#cb9-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-325"><a href="#cb9-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-326"><a href="#cb9-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-327"><a href="#cb9-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-328"><a href="#cb9-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-329"><a href="#cb9-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-330"><a href="#cb9-330" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-331"><a href="#cb9-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-332"><a href="#cb9-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-333"><a href="#cb9-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-334"><a href="#cb9-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-335"><a href="#cb9-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-336"><a href="#cb9-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-337"><a href="#cb9-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-338"><a href="#cb9-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-339"><a href="#cb9-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-340"><a href="#cb9-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-341"><a href="#cb9-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-342"><a href="#cb9-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-343"><a href="#cb9-343" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Banking Marketing: Exploratory Data Analysis"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "ST 558 Project 2"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Stanley Xiao"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="an">editor:</span><span class="co"> visual</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>This report explores the Bank Marketing dataset which contains information about customers contacted during a direct marketing campaign conducted by a Portuguese banking institution. The primary objective is to investigate how customer characteristics and campaign interactions relate to whether a customer subscribes to a term deposit.</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>The response variable, <span class="in">`y`</span>, records whether a customer subscribed to a term deposit.</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>The dataset was obtained from <span class="co">[</span><span class="ot">Kaggle: Banking Dataset (Marketing Targets)</span><span class="co">](https://www.kaggle.com/datasets/prakharrathi25/banking-dataset-marketing-targets)</span>, which is based on the <span class="co">[</span><span class="ot">UCI Bank Marketing dataset</span><span class="co">](https://archive.ics.uci.edu/dataset/222/bank+marketing)</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Preparation</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>The original dataset was obtained from Kaggle and consisted of two files, 'train.csv' and 'test.csv'. The datasets were combined, duplicate observations were removed, and categorical variables were converted to factors. The cleaned dataset was then saved as <span class="in">`bank_clean.csv`</span> for use in both the Shiny application and this exploratory analysis.</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="fu">### Original Data Cleaning Process</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>The following code documents the initial data preparation procedure. It is not executed during rendering because the cleaned dataset has already been created.</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: original-data-cleaning</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Read both datasets</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"Dataset/train.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"Dataset/test.csv"</span>, <span class="at">delim =</span> <span class="st">";"</span>)</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine train and test datasets and remove duplicate rows</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(train, test)</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> <span class="fu">distinct</span>(bank_data)</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for remaining duplicates</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">duplicated</span>(bank_data))</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean &amp; format</span></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), as.factor))</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Save combined clean data for the Shiny app</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(bank_data, <span class="st">"Dataset/bank_clean.csv"</span>)</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="fu">### Loading the Cleaned Dataset</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup-data</span></span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the prepared dataset</span></span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>bank_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Dataset/bank_clean.csv"</span>)</span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert categorical variables into factors</span></span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a>categorical_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a>  <span class="st">"job"</span>, <span class="st">"marital"</span>, <span class="st">"education"</span>, <span class="st">"default"</span>, <span class="st">"housing"</span>, <span class="st">"loan"</span>, <span class="st">"contact"</span>, <span class="st">"month"</span>, <span class="st">"poutcome"</span>,<span class="st">"y"</span></span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a>bank_data[categorical_vars] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(bank_data[categorical_vars],factor)</span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a>The resulting dataset contains <span class="in">`r nrow(bank_data)`</span> observations and <span class="in">`r ncol(bank_data)`</span> variables.</span>
+<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dataset Overview</span></span>
+<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dataset Dimensions</span></span>
+<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dataset-dimensions</span></span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Report the number of observations and variables</span></span>
+<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">Observations =</span> <span class="fu">nrow</span>(bank_data),</span>
+<span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variables =</span> <span class="fu">ncol</span>(bank_data)</span>
+<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Dataset Dimensions"</span></span>
+<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-104"><a href="#cb16-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-105"><a href="#cb16-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### Variable Types</span></span>
+<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: variable-types</span></span>
+<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the type of each variable</span></span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
+<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">Data_Type =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">class</span>(x)[<span class="dv">1</span>])</span>
+<span id="cb16-117"><a href="#cb16-117" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Variables and Data Types"</span></span>
+<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-123"><a href="#cb16-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### Missing Values</span></span>
+<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: missing-values</span></span>
+<span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values for each variable</span></span>
+<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a>missing_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(bank_data),</span>
+<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">Missing_Values =</span> <span class="fu">sapply</span>(bank_data, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a>missing_table <span class="sc">|&gt;</span></span>
+<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Missing Values by Variable"</span></span>
+<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a>Note that values such as "unknown" are recorded categories in this dataset and are not automatically treated as missing values.</span>
+<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-144"><a href="#cb16-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## Categorical Variable Summaries</span></span>
+<span id="cb16-145"><a href="#cb16-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a><span class="fu">### Term Deposit Subscription</span></span>
+<span id="cb16-147"><a href="#cb16-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-150"><a href="#cb16-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-151"><a href="#cb16-151" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: subscription-frequency</span></span>
+<span id="cb16-152"><a href="#cb16-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate subscription frequencies and percentages</span></span>
+<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
+<span id="cb16-158"><a href="#cb16-158" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
+<span id="cb16-159"><a href="#cb16-159" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
+<span id="cb16-160"><a href="#cb16-160" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-161"><a href="#cb16-161" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-162"><a href="#cb16-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-163"><a href="#cb16-163" aria-hidden="true" tabindex="-1"></a>subscription_table <span class="sc">|&gt;</span></span>
+<span id="cb16-164"><a href="#cb16-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Term Deposit Subscription Frequencies"</span>)</span>
+<span id="cb16-165"><a href="#cb16-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-166"><a href="#cb16-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-167"><a href="#cb16-167" aria-hidden="true" tabindex="-1"></a>This table shows the distribution of the response variable. The percentages help assess whether term deposit subscriptions are balanced between customers who subscribed and those who did not.</span>
+<span id="cb16-168"><a href="#cb16-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-169"><a href="#cb16-169" aria-hidden="true" tabindex="-1"></a><span class="fu">### Customer Job Categories</span></span>
+<span id="cb16-170"><a href="#cb16-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-173"><a href="#cb16-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-174"><a href="#cb16-174" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: job-frequency</span></span>
+<span id="cb16-175"><a href="#cb16-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-176"><a href="#cb16-176" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for customer occupations</span></span>
+<span id="cb16-177"><a href="#cb16-177" aria-hidden="true" tabindex="-1"></a>job_table <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb16-178"><a href="#cb16-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(job, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-179"><a href="#cb16-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-180"><a href="#cb16-180" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage =</span> <span class="fu">round</span>(</span>
+<span id="cb16-181"><a href="#cb16-181" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
+<span id="cb16-182"><a href="#cb16-182" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
+<span id="cb16-183"><a href="#cb16-183" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-184"><a href="#cb16-184" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb16-185"><a href="#cb16-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frequency))</span>
+<span id="cb16-186"><a href="#cb16-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-187"><a href="#cb16-187" aria-hidden="true" tabindex="-1"></a>job_table <span class="sc">|&gt;</span></span>
+<span id="cb16-188"><a href="#cb16-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb16-189"><a href="#cb16-189" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Customer Job Frequencies"</span></span>
+<span id="cb16-190"><a href="#cb16-190" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-191"><a href="#cb16-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-192"><a href="#cb16-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-193"><a href="#cb16-193" aria-hidden="true" tabindex="-1"></a>This table identifies the most common occupational categories among customers in the dataset.</span>
+<span id="cb16-194"><a href="#cb16-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-195"><a href="#cb16-195" aria-hidden="true" tabindex="-1"></a><span class="fu">### Subscription Outcome by Education</span></span>
+<span id="cb16-196"><a href="#cb16-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-199"><a href="#cb16-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-200"><a href="#cb16-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: education-subscription</span></span>
+<span id="cb16-201"><a href="#cb16-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-202"><a href="#cb16-202" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate frequencies for education and subscription</span></span>
+<span id="cb16-203"><a href="#cb16-203" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb16-204"><a href="#cb16-204" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(education, y, <span class="at">name =</span> <span class="st">"Frequency"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-205"><a href="#cb16-205" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(education) <span class="sc">|&gt;</span></span>
+<span id="cb16-206"><a href="#cb16-206" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-207"><a href="#cb16-207" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentage_Within_Education =</span> <span class="fu">round</span>(</span>
+<span id="cb16-208"><a href="#cb16-208" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> Frequency <span class="sc">/</span> <span class="fu">sum</span>(Frequency),</span>
+<span id="cb16-209"><a href="#cb16-209" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span></span>
+<span id="cb16-210"><a href="#cb16-210" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-211"><a href="#cb16-211" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb16-212"><a href="#cb16-212" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb16-213"><a href="#cb16-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-214"><a href="#cb16-214" aria-hidden="true" tabindex="-1"></a>education_subscription <span class="sc">|&gt;</span></span>
+<span id="cb16-215"><a href="#cb16-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb16-216"><a href="#cb16-216" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Subscription Outcomes by Education Level"</span></span>
+<span id="cb16-217"><a href="#cb16-217" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-218"><a href="#cb16-218" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-219"><a href="#cb16-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-220"><a href="#cb16-220" aria-hidden="true" tabindex="-1"></a>This two-way summary compares subscription outcomes across education categories. Percentages are calculated within each education group, allowing comparisons between groups at different sizes.</span>
+<span id="cb16-221"><a href="#cb16-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-222"><a href="#cb16-222" aria-hidden="true" tabindex="-1"></a><span class="fu">## Numerical Variable Summaries</span></span>
+<span id="cb16-223"><a href="#cb16-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-224"><a href="#cb16-224" aria-hidden="true" tabindex="-1"></a><span class="fu">### Overall Descriptive Statistics</span></span>
+<span id="cb16-225"><a href="#cb16-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-228"><a href="#cb16-228" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-229"><a href="#cb16-229" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: overall-numeric-summary</span></span>
+<span id="cb16-230"><a href="#cb16-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-231"><a href="#cb16-231" aria-hidden="true" tabindex="-1"></a><span class="co"># Select numerical variables</span></span>
+<span id="cb16-232"><a href="#cb16-232" aria-hidden="true" tabindex="-1"></a>numeric_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-233"><a href="#cb16-233" aria-hidden="true" tabindex="-1"></a>  <span class="st">"age"</span>, <span class="st">"balance"</span>, <span class="st">"duration"</span>, <span class="st">"campaign"</span>, <span class="st">"pdays"</span>, <span class="st">"previous"</span></span>
+<span id="cb16-234"><a href="#cb16-234" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-235"><a href="#cb16-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-236"><a href="#cb16-236" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate descriptive statistics for each variable</span></span>
+<span id="cb16-237"><a href="#cb16-237" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(numeric_vars, <span class="cf">function</span>(variable) {</span>
+<span id="cb16-238"><a href="#cb16-238" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-239"><a href="#cb16-239" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> bank_data[[variable]]</span>
+<span id="cb16-240"><a href="#cb16-240" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
+<span id="cb16-241"><a href="#cb16-241" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-242"><a href="#cb16-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb16-243"><a href="#cb16-243" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> variable,</span>
+<span id="cb16-244"><a href="#cb16-244" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">length</span>(x),</span>
+<span id="cb16-245"><a href="#cb16-245" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(x),</span>
+<span id="cb16-246"><a href="#cb16-246" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median =</span> <span class="fu">median</span>(x),</span>
+<span id="cb16-247"><a href="#cb16-247" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD =</span> <span class="fu">sd</span>(x),</span>
+<span id="cb16-248"><a href="#cb16-248" aria-hidden="true" tabindex="-1"></a>    <span class="at">Min =</span> <span class="fu">min</span>(x),</span>
+<span id="cb16-249"><a href="#cb16-249" aria-hidden="true" tabindex="-1"></a>    <span class="at">Max =</span> <span class="fu">max</span>(x)</span>
+<span id="cb16-250"><a href="#cb16-250" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-251"><a href="#cb16-251" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb16-252"><a href="#cb16-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-253"><a href="#cb16-253" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numerical results</span></span>
+<span id="cb16-254"><a href="#cb16-254" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> numeric_summary <span class="sc">|&gt;</span></span>
+<span id="cb16-255"><a href="#cb16-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-256"><a href="#cb16-256" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb16-257"><a href="#cb16-257" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(Mean, Median, SD, Min, Max),</span>
+<span id="cb16-258"><a href="#cb16-258" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
+<span id="cb16-259"><a href="#cb16-259" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-260"><a href="#cb16-260" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-261"><a href="#cb16-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-262"><a href="#cb16-262" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="sc">|&gt;</span></span>
+<span id="cb16-263"><a href="#cb16-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb16-264"><a href="#cb16-264" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Overall Numerical Descriptive Statistics"</span></span>
+<span id="cb16-265"><a href="#cb16-265" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-266"><a href="#cb16-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-267"><a href="#cb16-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-268"><a href="#cb16-268" aria-hidden="true" tabindex="-1"></a>The numerical summary describes the center, spread, and range of the selected quantitative variables. Differences between means and medians may suggest skewed distributions or extreme observations.</span>
+<span id="cb16-269"><a href="#cb16-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-270"><a href="#cb16-270" aria-hidden="true" tabindex="-1"></a>For the variable <span class="in">`pdays`</span>, special values like '-1' may indicate that a customer was not previously contacted. These values should be interpreted according to the dataset documentation rather than treated as ordinary elapsed days.</span>
+<span id="cb16-271"><a href="#cb16-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-272"><a href="#cb16-272" aria-hidden="true" tabindex="-1"></a><span class="fu">### Numerical Summaries by Subscription Outcome</span></span>
+<span id="cb16-273"><a href="#cb16-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-276"><a href="#cb16-276" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-277"><a href="#cb16-277" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: grouped-numeric-summary</span></span>
+<span id="cb16-278"><a href="#cb16-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-279"><a href="#cb16-279" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare age, balance, and call duration by outcome</span></span>
+<span id="cb16-280"><a href="#cb16-280" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb16-281"><a href="#cb16-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
+<span id="cb16-282"><a href="#cb16-282" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb16-283"><a href="#cb16-283" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">n</span>(),</span>
+<span id="cb16-284"><a href="#cb16-284" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-285"><a href="#cb16-285" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Age =</span> <span class="fu">median</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-286"><a href="#cb16-286" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Balance =</span> <span class="fu">mean</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-287"><a href="#cb16-287" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Balance =</span> <span class="fu">median</span>(balance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-288"><a href="#cb16-288" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Duration =</span> <span class="fu">mean</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-289"><a href="#cb16-289" aria-hidden="true" tabindex="-1"></a>    <span class="at">Median_Duration =</span> <span class="fu">median</span>(duration, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-290"><a href="#cb16-290" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb16-291"><a href="#cb16-291" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb16-292"><a href="#cb16-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-293"><a href="#cb16-293" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb16-294"><a href="#cb16-294" aria-hidden="true" tabindex="-1"></a>      <span class="fu">where</span>(is.numeric),</span>
+<span id="cb16-295"><a href="#cb16-295" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)</span>
+<span id="cb16-296"><a href="#cb16-296" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-297"><a href="#cb16-297" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-298"><a href="#cb16-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-299"><a href="#cb16-299" aria-hidden="true" tabindex="-1"></a>grouped_summary <span class="sc">|&gt;</span></span>
+<span id="cb16-300"><a href="#cb16-300" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb16-301"><a href="#cb16-301" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Numerical Characteristics by Subscription Outcome"</span></span>
+<span id="cb16-302"><a href="#cb16-302" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-303"><a href="#cb16-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-304"><a href="#cb16-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-305"><a href="#cb16-305" aria-hidden="true" tabindex="-1"></a>This grouped summary compares customers who subscribed to a term deposit with those who did not. It provides an initial assessment of differences in age, account balance, and call duration between the two groups.</span>
+<span id="cb16-306"><a href="#cb16-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-307"><a href="#cb16-307" aria-hidden="true" tabindex="-1"></a>Because this is an observational dataset, any differences should be interpreted as associations rather than evidence of causation.</span>
+<span id="cb16-308"><a href="#cb16-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-309"><a href="#cb16-309" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exploratory Data Visualizations</span></span>
+<span id="cb16-310"><a href="#cb16-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-311"><a href="#cb16-311" aria-hidden="true" tabindex="-1"></a>The following visualizations explore customer demographics, account balances, marketing campaign characteristics, and term deposit subscription outcomes. Both univariate and multivariate plots are included to identify patterns and differences across customer groups.</span>
+<span id="cb16-312"><a href="#cb16-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-313"><a href="#cb16-313" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plot 1: Distribution of Customer Age</span></span>
+<span id="cb16-314"><a href="#cb16-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-317"><a href="#cb16-317" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-318"><a href="#cb16-318" aria-hidden="true" tabindex="-1"></a><span class="co"># Univariate histogram of customer age</span></span>
+<span id="cb16-319"><a href="#cb16-319" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bank_data, <span class="fu">aes</span>(<span class="at">x =</span> age)) <span class="sc">+</span></span>
+<span id="cb16-320"><a href="#cb16-320" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb16-321"><a href="#cb16-321" aria-hidden="true" tabindex="-1"></a>    <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb16-322"><a href="#cb16-322" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb16-323"><a href="#cb16-323" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span></span>
+<span id="cb16-324"><a href="#cb16-324" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-325"><a href="#cb16-325" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-326"><a href="#cb16-326" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Customer Age"</span>,</span>
+<span id="cb16-327"><a href="#cb16-327" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age (Years)"</span>,</span>
+<span id="cb16-328"><a href="#cb16-328" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Customers"</span></span>
+<span id="cb16-329"><a href="#cb16-329" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-330"><a href="#cb16-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb16-331"><a href="#cb16-331" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-332"><a href="#cb16-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-333"><a href="#cb16-333" aria-hidden="true" tabindex="-1"></a>The distribution of customer age is moderately right-skewed, with most customers concentrated between 25 and 60 years old. The highest frequencies occur among customers in their early to mid-30s, while the number of customers generally decreases at older ages. Relatively few customers are younger than 25 or older than 65. These findings suggests that the bank's marketing campaign primarily reached working-age adults.</span>
+<span id="cb16-334"><a href="#cb16-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-335"><a href="#cb16-335" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plot 2: Distribution of Account Balances</span></span>
+<span id="cb16-336"><a href="#cb16-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-339"><a href="#cb16-339" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-340"><a href="#cb16-340" aria-hidden="true" tabindex="-1"></a><span class="co"># Univariate histogram of customer account balances</span></span>
+<span id="cb16-341"><a href="#cb16-341" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bank_data, <span class="fu">aes</span>(<span class="at">x =</span> balance)) <span class="sc">+</span> </span>
+<span id="cb16-342"><a href="#cb16-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb16-343"><a href="#cb16-343" aria-hidden="true" tabindex="-1"></a>    <span class="at">bins =</span> <span class="dv">50</span>,</span>
+<span id="cb16-344"><a href="#cb16-344" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"darkseagreen"</span>,</span>
+<span id="cb16-345"><a href="#cb16-345" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span></span>
+<span id="cb16-346"><a href="#cb16-346" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-347"><a href="#cb16-347" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-348"><a href="#cb16-348" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Account Balances"</span>,</span>
+<span id="cb16-349"><a href="#cb16-349" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Account Balance"</span>,</span>
+<span id="cb16-350"><a href="#cb16-350" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Customers"</span></span>
+<span id="cb16-351"><a href="#cb16-351" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-352"><a href="#cb16-352" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb16-353"><a href="#cb16-353" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-354"><a href="#cb16-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-355"><a href="#cb16-355" aria-hidden="true" tabindex="-1"></a>The distribution of account balances is strongly right-skewed. Most customers have relatively low account balances, while a small number have exceptionally high balances, exceeding 100,000 in some cases. The presence of extreme values suggests that the median may provide a more representative measure of a typical customer's account balance than the mean.</span>
+<span id="cb16-356"><a href="#cb16-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-357"><a href="#cb16-357" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plot 3: Subscription Outcome by Education Level</span></span>
+<span id="cb16-358"><a href="#cb16-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-361"><a href="#cb16-361" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-362"><a href="#cb16-362" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate plot: education and subscription outcome</span></span>
+<span id="cb16-363"><a href="#cb16-363" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb16-364"><a href="#cb16-364" aria-hidden="true" tabindex="-1"></a>  bank_data,</span>
+<span id="cb16-365"><a href="#cb16-365" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> education, <span class="at">fill =</span> y)</span>
+<span id="cb16-366"><a href="#cb16-366" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb16-367"><a href="#cb16-367" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb16-368"><a href="#cb16-368" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb16-369"><a href="#cb16-369" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> scales<span class="sc">::</span>percent</span>
+<span id="cb16-370"><a href="#cb16-370" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb16-371"><a href="#cb16-371" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-372"><a href="#cb16-372" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Term Deposit Subscription by Education"</span>,</span>
+<span id="cb16-373"><a href="#cb16-373" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Education Level"</span>,</span>
+<span id="cb16-374"><a href="#cb16-374" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Percentage of Customers"</span>,</span>
+<span id="cb16-375"><a href="#cb16-375" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Subscribed"</span></span>
+<span id="cb16-376"><a href="#cb16-376" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-377"><a href="#cb16-377" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb16-378"><a href="#cb16-378" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-379"><a href="#cb16-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-380"><a href="#cb16-380" aria-hidden="true" tabindex="-1"></a>Term deposit subscription rates vary across education levels. Customers with tertiary education have the highest observed subscription proportion, while those with primary education have the lowest. This suggests an association between education level and subscriptino outcome, although the anlaysis does not establish a causal relationship.</span>
+<span id="cb16-381"><a href="#cb16-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-382"><a href="#cb16-382" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plot 4: Account Balance by Subscription Outcome</span></span>
+<span id="cb16-383"><a href="#cb16-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-386"><a href="#cb16-386" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-387"><a href="#cb16-387" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate boxplot: balance and subscription outcome</span></span>
+<span id="cb16-388"><a href="#cb16-388" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb16-389"><a href="#cb16-389" aria-hidden="true" tabindex="-1"></a>  bank_data,</span>
+<span id="cb16-390"><a href="#cb16-390" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> balance, <span class="at">fill =</span> y)</span>
+<span id="cb16-391"><a href="#cb16-391" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb16-392"><a href="#cb16-392" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(</span>
+<span id="cb16-393"><a href="#cb16-393" aria-hidden="true" tabindex="-1"></a>    <span class="at">outlier.alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb16-394"><a href="#cb16-394" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-395"><a href="#cb16-395" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-396"><a href="#cb16-396" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Account Balance by Subscription Outcome"</span>,</span>
+<span id="cb16-397"><a href="#cb16-397" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Subscribed to Term Deposit"</span>,</span>
+<span id="cb16-398"><a href="#cb16-398" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Account Balance"</span>,</span>
+<span id="cb16-399"><a href="#cb16-399" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Subscribed"</span></span>
+<span id="cb16-400"><a href="#cb16-400" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-401"><a href="#cb16-401" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2000</span>, <span class="dv">10000</span>)) <span class="sc">+</span></span>
+<span id="cb16-402"><a href="#cb16-402" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-403"><a href="#cb16-403" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb16-404"><a href="#cb16-404" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span></span>
+<span id="cb16-405"><a href="#cb16-405" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-406"><a href="#cb16-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-407"><a href="#cb16-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-408"><a href="#cb16-408" aria-hidden="true" tabindex="-1"></a>Customers who subscribed to a term deposit appear to have a higher median account balance than customers who did not subscribe. However, the distributions overlap substantially, and both groups contain numerous high-balance outliers. Therefore, account balance alone may not clearly distinguish between subscription outcomes.</span>
+<span id="cb16-409"><a href="#cb16-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-410"><a href="#cb16-410" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plot 5: Age and Account Balance by Subscription Outcome</span></span>
+<span id="cb16-411"><a href="#cb16-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-414"><a href="#cb16-414" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-415"><a href="#cb16-415" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate scatterplot with faceting</span></span>
+<span id="cb16-416"><a href="#cb16-416" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb16-417"><a href="#cb16-417" aria-hidden="true" tabindex="-1"></a>  bank_data,</span>
+<span id="cb16-418"><a href="#cb16-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> balance)</span>
+<span id="cb16-419"><a href="#cb16-419" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb16-420"><a href="#cb16-420" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb16-421"><a href="#cb16-421" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.25</span>,</span>
+<span id="cb16-422"><a href="#cb16-422" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"steelblue"</span></span>
+<span id="cb16-423"><a href="#cb16-423" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-424"><a href="#cb16-424" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> y) <span class="sc">+</span></span>
+<span id="cb16-425"><a href="#cb16-425" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-426"><a href="#cb16-426" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Age vs Account Balance by Subscription Outcome"</span>,</span>
+<span id="cb16-427"><a href="#cb16-427" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age (Years)"</span>,</span>
+<span id="cb16-428"><a href="#cb16-428" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Account Balance"</span></span>
+<span id="cb16-429"><a href="#cb16-429" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb16-430"><a href="#cb16-430" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb16-431"><a href="#cb16-431" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-432"><a href="#cb16-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-433"><a href="#cb16-433" aria-hidden="true" tabindex="-1"></a>The faceted scatterplot does not reveal a strong linear relationship between customer age and account balance in either subscription group. Most customers have relatively low account balances across a wide range of ages, while a small number have unusually high balances. The two subscriptino groups show broadly similar patterns, suggesting that age and account balance alone may not provide a clear separation between subscription outcomes.</span>
+<span id="cb16-434"><a href="#cb16-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-435"><a href="#cb16-435" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plot 6: Subscription Rates by Job and Education</span></span>
+<span id="cb16-436"><a href="#cb16-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-439"><a href="#cb16-439" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-440"><a href="#cb16-440" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate subscription percentages for each job and education group</span></span>
+<span id="cb16-441"><a href="#cb16-441" aria-hidden="true" tabindex="-1"></a>heatmap_data <span class="ot">&lt;-</span> bank_data <span class="sc">|&gt;</span></span>
+<span id="cb16-442"><a href="#cb16-442" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(job, education) <span class="sc">|&gt;</span></span>
+<span id="cb16-443"><a href="#cb16-443" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb16-444"><a href="#cb16-444" aria-hidden="true" tabindex="-1"></a>    <span class="at">Subscription_Rate =</span> <span class="fu">mean</span>(y <span class="sc">==</span> <span class="st">"yes"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb16-445"><a href="#cb16-445" aria-hidden="true" tabindex="-1"></a>    <span class="at">Customer_Count =</span> <span class="fu">n</span>(),</span>
+<span id="cb16-446"><a href="#cb16-446" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb16-447"><a href="#cb16-447" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-448"><a href="#cb16-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-449"><a href="#cb16-449" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate heatmap of subscription rates</span></span>
+<span id="cb16-450"><a href="#cb16-450" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb16-451"><a href="#cb16-451" aria-hidden="true" tabindex="-1"></a>  heatmap_data,</span>
+<span id="cb16-452"><a href="#cb16-452" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb16-453"><a href="#cb16-453" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> education,</span>
+<span id="cb16-454"><a href="#cb16-454" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> job,</span>
+<span id="cb16-455"><a href="#cb16-455" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> Subscription_Rate</span>
+<span id="cb16-456"><a href="#cb16-456" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-457"><a href="#cb16-457" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb16-458"><a href="#cb16-458" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(</span>
+<span id="cb16-459"><a href="#cb16-459" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb16-460"><a href="#cb16-460" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.5</span></span>
+<span id="cb16-461"><a href="#cb16-461" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-462"><a href="#cb16-462" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb16-463"><a href="#cb16-463" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> Customer_Count),</span>
+<span id="cb16-464"><a href="#cb16-464" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb16-465"><a href="#cb16-465" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb16-466"><a href="#cb16-466" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-467"><a href="#cb16-467" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(</span>
+<span id="cb16-468"><a href="#cb16-468" aria-hidden="true" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">"lightyellow"</span>,</span>
+<span id="cb16-469"><a href="#cb16-469" aria-hidden="true" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">"darkblue"</span></span>
+<span id="cb16-470"><a href="#cb16-470" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-471"><a href="#cb16-471" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-472"><a href="#cb16-472" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Subscription Rates by Job and Education"</span>,</span>
+<span id="cb16-473"><a href="#cb16-473" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Education Level"</span>,</span>
+<span id="cb16-474"><a href="#cb16-474" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Job Category"</span>,</span>
+<span id="cb16-475"><a href="#cb16-475" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Subscription</span><span class="sc">\n</span><span class="st">Rate (%)"</span></span>
+<span id="cb16-476"><a href="#cb16-476" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-477"><a href="#cb16-477" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-478"><a href="#cb16-478" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb16-479"><a href="#cb16-479" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust  =</span> <span class="dv">1</span>)</span>
+<span id="cb16-480"><a href="#cb16-480" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-481"><a href="#cb16-481" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-482"><a href="#cb16-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-483"><a href="#cb16-483" aria-hidden="true" tabindex="-1"></a>The heatmap reveals differences in term deposit subscription rates across job categories and education levels. Students and retired customers generally exhibit higher subscription rates than many other occupational groups. In particular, students with primary education display one of the highest observed subscription rates. However, this result should be interpreted cautiously because some job-education combinations may contain relatively few observations. Overall, the heatmap suggests that occupation and education may be jointly associated with subscription outcomes.</span>
+<span id="cb16-484"><a href="#cb16-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-485"><a href="#cb16-485" aria-hidden="true" tabindex="-1"></a><span class="fu">## Discussion &amp; Conclusion</span></span>
+<span id="cb16-486"><a href="#cb16-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-487"><a href="#cb16-487" aria-hidden="true" tabindex="-1"></a>The exploratory analysis of the Bank Marketing dataset reveals several patterns in customer demographics, financial characteristics, and term deposit subscription outcomes.</span>
+<span id="cb16-488"><a href="#cb16-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-489"><a href="#cb16-489" aria-hidden="true" tabindex="-1"></a>First, most customers are between approximately 25 and 60 years old, with the greatest concentration among individuals in their early to mid-30s. Account balances exhibit substantial right-skewness, with most customers having relatively low balances and a small number having exceptionally high balances. This suggests that medians may be more informative than means when describing typical account balances.</span>
+<span id="cb16-490"><a href="#cb16-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-491"><a href="#cb16-491" aria-hidden="true" tabindex="-1"></a>Second, subscription outcomes appear to vary across customer characteristics. Customers with tertiary education have a higher observed subscription proportion than those with primary or secondary education. Customers who subscribed also appear to have higher median account balances, although there is considerable overlap between the subscription groups.</span>
+<span id="cb16-492"><a href="#cb16-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-493"><a href="#cb16-493" aria-hidden="true" tabindex="-1"></a>Third, the faceted scatterplot does not indicate a strong linear relationship between age and account balance in either subscription group. The heatmap reveals additional differences across combinations of occupation and education, with students and retired customers generally displaying relatively high subscription rates. However, results for groups with small sample sizes should be interpreted with caution.</span>
+<span id="cb16-494"><a href="#cb16-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-495"><a href="#cb16-495" aria-hidden="true" tabindex="-1"></a>Overall, the findings suggest that education, occupation, and account balance may be associated with term deposit subscription outcomes. These results are descriptive and do not establish causal relationships. Future analyses could investigate these associations using statistical models while accounting for additional customer and campaign characteristics.</span>
+<span id="cb16-496"><a href="#cb16-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-497"><a href="#cb16-497" aria-hidden="true" tabindex="-1"></a>An additional consideration is that call duration is observed during or after a marketing contact. Although it may be associated with subscription outcomes, it would not necessarily be available when predicting customer responses before a call takes place.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
