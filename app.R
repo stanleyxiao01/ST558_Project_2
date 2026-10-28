@@ -1,7 +1,10 @@
 
-
+# ---------------------------------------------------------
 # ST 558 Project 2: Bank Marketing Analytics Dashboard
-# Interactive exploration of customer characteristics and term deposit subscription outcomes
+# Author: Stanley Xiao
+# Date: October 27, 2026
+# Purpose: Create an interactive Shiny dashboard to explore customer characteristics, marketing campaign outcomes, and term deposit subscriptions.
+# ---------------------------------------------------------
 
 library(ggplot2)
 library(shiny)
