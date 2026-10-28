@@ -25,7 +25,6 @@ The dataset was obtained from [Kaggle: Banking Dataset (Marketing Targets)](http
 
 The original dataset was obtained from Kaggle and consisted of two files, 'train.csv' and 'test.csv'. The datasets were combined, duplicate observations were removed, and categorical variables were converted to factors. The cleaned dataset was then saved as `bank_clean.csv` for use in both the Shiny application and this exploratory analysis.
 
-
 ### Original Data Cleaning Process
 
 The following code documents the initial data preparation procedure. It is not executed during rendering because the cleaned dataset has already been created.

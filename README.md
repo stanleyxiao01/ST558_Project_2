@@ -86,22 +86,5 @@ The source file for the report is `eda.qmd`. The report is rendered to HTML usin
 
 ## Live Application
 
-Will add after deployment
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+[Launch the Bank Marketing Analytics Dashboard](https://stanleyxiao01.shinyapps.io/ST558_Project_2/)
 

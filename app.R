@@ -58,8 +58,16 @@ plot_choices <- c(
 # Optional choices for summaries without grouping
 categorical_choices_optional <- c("None" = "none", categorical_choices)
 
-job_choices <- c("All", sort(unique(bank_data$job)))
-education_choices <- c("All", sort(unique(bank_data$education)))
+# Format dropdown labels while preserving original data values
+# Job choices
+job_values <- sort(unique(bank_data$job))
+
+job_choices <- c("All" = "All", setNames(job_values, tools::toTitleCase(job_values)))
+
+# Education choices
+education_values <- sort(unique(bank_data$education))
+
+education_choices <- c("All" = "All", setNames(education_values, tools::toTitleCase(education_values)))
 
 # Define UI
 ui <- fluidPage(
@@ -133,7 +141,7 @@ ui <- fluidPage(
         ),
         p(
           strong("Response Variable:"),
-          "The variable 'y' indicates whether a customer subscribed to a term deposit (yes or no)."
+          "The variable `y` indicates whether a customer subscribed to a term deposit (yes or no)."
         ),
         h4("About the Dataset"),
         p(
