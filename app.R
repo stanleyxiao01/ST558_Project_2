@@ -52,7 +52,8 @@ plot_choices <- c(
   "Histogram" = "histogram",
   "Boxplot" = "boxplot",
   "Bar Chart" = "bar",
-  "Scatterplot" = "scatter"
+  "Scatterplot" = "scatter",
+  "Heatmap" = "heatmap"
 )
 
 # Optional choices for summaries without grouping
@@ -153,6 +154,7 @@ ui <- fluidPage(
           tags$li("Choose two numerical variables and adjust their ranges."),
           tags$li("Click Apply Filters to update the dataset."),
           tags$li("Open the Data Download tab to view or download the data."),
+          tags$li("Open the EDA Report tab to view the complete Quarto exploratory analysis, including six visualizations and interpretations."),
           tags$li(
             "Open the Data Exploration tab to generate summary tables and customized visualizations."
           ),
@@ -572,6 +574,7 @@ server <- function(input, output, session) {
   
   # Dynamic Plot Variable Controls
   output$plot_variable_controls <- renderUI({
+    
     req(input$plot_type)
     
     plot_type <- input$plot_type
@@ -630,6 +633,24 @@ server <- function(input, output, session) {
           label = "Select Y-Axis Numerical Variable:",
           choices = numeric_choices,
           selected = "balance"
+        )
+      )
+    } else if (plot_type == "heatmap") {
+      
+      # Heatmaps compare two categorical variables
+      tagList(
+        selectInput(
+          inputId = "heatmap_x",
+          label = "Select X-Axis Categorical Variable:",
+          choices = categorical_choices,
+          selected = "education"
+        ),
+        
+        selectInput(
+          inputId = "heatmap_y",
+          label = "Select Y-Axis Categorical Variable:",
+          choices = categorical_choices,
+          selected = "job"
         )
       )
     }
@@ -722,12 +743,63 @@ server <- function(input, output, session) {
           y = numeric_y
         )
       
+    } else if (plot_type == "heatmap") {
+      
+      # Wait for both categorical variables
+      req(input$heatmap_x, input$heatmap_y)
+      
+      heatmap_x <- input$heatmap_x
+      heatmap_y <- input$heatmap_y
+      
+      # Ensure two categorical variables are selected
+      validate(need(heatmap_x != heatmap_y, "Select two different categorical variables."))
+      
+      # Calculate subscription rates and group sizes
+      heatmap_data <- data |>
+        dplyr::group_by(
+          .data[[heatmap_x]],
+          .data[[heatmap_y]]
+        ) |>
+        dplyr::summarise(
+          Subscription_Rate = mean(y == "yes") * 100,
+          Customer_Count = dplyr::n(),
+          .groups = "drop"
+        )
+      
+      # Create heatmap
+      p <- ggplot(
+        heatmap_data,
+        aes(
+          x = .data[[heatmap_x]],
+          y = .data[[heatmap_y]],
+          fill = Subscription_Rate
+        )
+      ) + geom_tile(
+        color = "white",
+        linewidth = 0.5
+      ) +
+        geom_text(
+          aes(label = Customer_Count),
+          size = 3
+        ) +
+        scale_fill_gradient(
+          low = "lightyellow",
+          high = "darkblue",
+          na.value = "grey85"
+        ) +
+        labs(
+          title = "Term Deposit Subscription Rate Heatmap",
+          x = heatmap_x,
+          y = heatmap_y,
+          fill = "Subscription Rate (%)"
+        )
+      
     } else {
       validate(need(FALSE, "Please select a valid plot type."))
     }
     
     # Apply optional grouping through fill or color
-    if (group_var != "none") {
+    if (group_var != "none" && plot_type != "heatmap") {
       if (plot_type == "scatter") {
         # Color scatterplot points by group
         p <- p +
@@ -745,7 +817,7 @@ server <- function(input, output, session) {
     
     # Apply Optional Faceting
     
-    if (facet_var != "none") {
+    if (facet_var != "none" && plot_type != "heatmap") {
       # Create separate panels for each category
       p <- p + facet_wrap(vars(.data[[facet_var]]))
     }
